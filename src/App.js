@@ -11,7 +11,7 @@ const App = () => {
     if (itemName && itemPrice) {
       try {
         // Call the API to add an item
-        const response = await fetch('https://oikucoexi0.execute-api.us-west-2.amazonaws.com/add-item', {
+        const response = await fetch('https://oikucoexi0.execute-api.us-west-2.amazonaws.com/Master/add-item', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
