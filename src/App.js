@@ -3,12 +3,13 @@ import './App.css';
 
 const App = () => {
   const [items, setItems] = useState([]);
+  const [itemId, setItemId] = useState('');
   const [itemName, setItemName] = useState('');
   const [itemPrice, setItemPrice] = useState('');
   const [message, setMessage] = useState('');
 
   const handleAddItem = async () => {
-    if (itemName && itemPrice) {
+    if (itemId && itemName && itemPrice) {
       try {
         // Call the API to add an item
         const response = await fetch('https://oikucoexi0.execute-api.us-west-2.amazonaws.com/Master/add-item', {
@@ -17,6 +18,7 @@ const App = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            itemId: itemId,
             name: itemName,
             price: parseFloat(itemPrice),
           }),
@@ -25,8 +27,9 @@ const App = () => {
         if (response.ok) {
           const data = await response.json();
           // Add the item to the list
-          setItems([...items, { name: itemName, price: parseFloat(itemPrice) }]);
+          setItems([...items, { itemId: itemId, name: itemName, price: parseFloat(itemPrice) }]);
           // Clear the form fields
+          setItemId('');
           setItemName('');
           setItemPrice('');
           setMessage('Item added successfully!');
@@ -38,7 +41,7 @@ const App = () => {
         setMessage(`Error: ${error.message}`);
       }
     } else {
-      setMessage('Please enter both item name and price.');
+      setMessage('Please enter item ID, name, and price.');
     }
   };
 
@@ -46,6 +49,12 @@ const App = () => {
     <div className="App">
       <h1>Personal Finance Tracker</h1>
       <div className="input-section">
+        <input
+          type="text"
+          value={itemId}
+          onChange={(e) => setItemId(e.target.value)}
+          placeholder="Item ID"
+        />
         <input
           type="text"
           value={itemName}
@@ -66,7 +75,7 @@ const App = () => {
         <ul>
           {items.map((item, index) => (
             <li key={index}>
-              {item.name} - ${item.price.toFixed(2)}
+              {item.itemId} - {item.name} - ${item.price.toFixed(2)}
             </li>
           ))}
         </ul>
